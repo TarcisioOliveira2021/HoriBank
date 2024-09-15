@@ -4,4 +4,5 @@ import com.horibank.horibank.domain.Pessoa;
 
 public interface IPessoaService {
     void CadastrarPessoa(Pessoa pessoa);
+    Pessoa ObterPessoaPeloCPF(String cpf);
 }

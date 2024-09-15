@@ -16,4 +16,9 @@ public class PessoaService implements IPessoaService {
     public void CadastrarPessoa(Pessoa pessoa) {
         pessoaRepository.save(pessoa);
     }
+
+    public Pessoa ObterPessoaPeloCPF(String cpf) {
+        System.out.println("CPF:"  + cpf);
+        return pessoaRepository.findBynuCpf(cpf);
+    }
 }

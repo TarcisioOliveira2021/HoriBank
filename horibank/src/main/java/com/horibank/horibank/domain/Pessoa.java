@@ -13,37 +13,41 @@ public class Pessoa {
     @Id
     @GeneratedValue
     private Integer id;
-    private int nuCpf;
+    private String nuCpf;
     private String nome;
     private String telefone;
 
     @OneToMany
     private List<Conta> conta;
-    
+
     public Pessoa() {
     }
-
-    public Pessoa(int nuCpf, String nome, String telefone, List<Conta> conta) {
+    
+    public Pessoa(String nuCpf, String nome, String telefone, List<Conta> conta) {
         this.nuCpf = nuCpf;
         this.nome = nome;
         this.telefone = telefone;
         this.conta = conta;
     }
 
-    public List<Conta> getConta() {
+    public Integer getId() {
+        return id;
+    }
+
+    public List<Conta> getContas() {
         return conta;
     }
 
-    public void setConta(List<Conta> conta) {
-        this.conta = conta;
+    public void setConta(Conta conta) {
+        this.conta.add(conta);
     }
 
 
-    public int getNuCpf() {
+    public String getNuCpf() {
         return nuCpf;
     }
 
-    public void setNuCpf(int nuCpf) {
+    public void setNuCpf(String nuCpf) {
         this.nuCpf = nuCpf;
     }
 
@@ -63,5 +67,9 @@ public class Pessoa {
         this.telefone = telefone;
     }
 
-
+    @Override
+    public String toString() {
+        return "Pessoa [nuCpf=" + nuCpf + ", nome=" + nome + ", telefone=" + telefone + ", conta=" + conta + "]";
+    }
+    
 }

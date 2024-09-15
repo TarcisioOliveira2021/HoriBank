@@ -23,10 +23,10 @@ public class Conta {
     
     @Enumerated(EnumType.STRING)
     private TipoConta tipoConta;
-    
+   
     public Conta() {
     }
-
+    
     public Conta(Integer idPessoa, int numero, int digito, double saldo, TipoConta tipoConta) {
         this.idPessoa = idPessoa;
         this.numero = numero;
@@ -34,7 +34,7 @@ public class Conta {
         this.saldo = saldo;
         this.tipoConta = tipoConta;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -82,4 +82,10 @@ public class Conta {
         this.tipoConta = tipoConta;
     }
 
+    @Override
+    public String toString() {
+        return "Conta [idPessoa=" + idPessoa + ", numero=" + numero + ", digito=" + digito + ", saldo=" + saldo
+                + ", tipoConta=" + tipoConta + "]";
+    }
+    
 }
