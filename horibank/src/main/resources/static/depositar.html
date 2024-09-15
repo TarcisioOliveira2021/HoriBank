@@ -131,7 +131,7 @@
 
 
     function depositar(){
-        let valorDeposito = document.getElementById('valorDeposito').value.replace('R$ ', '');        
+        let valorDeposito = document.getElementById('valorDeposito').value.replace('R$ ', '').replace("'", "");        
         var urlParams = new URLSearchParams(window.location.search);
         let id = urlParams.get('id');
 

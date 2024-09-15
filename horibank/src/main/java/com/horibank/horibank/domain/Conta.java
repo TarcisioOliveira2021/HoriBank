@@ -92,4 +92,15 @@ public class Conta {
     public void Depositar(double valor) {
         this.saldo += valor;
     }
+
+    public void Sacar(double valor) {
+        ValidarSaldoDisponivel(valor);
+        this.saldo -= valor;
+    }
+
+    private void ValidarSaldoDisponivel(double valor) {
+        if (this.saldo < valor) {
+            throw new IllegalArgumentException("Saldo insuficiente");
+        }
+    }
 }

@@ -7,6 +7,7 @@ import com.horibank.horibank.domain.Conta;
 import com.horibank.horibank.domain.enums.TipoConta;
 import com.horibank.horibank.domain.record.ContaRecord;
 import com.horibank.horibank.domain.record.Deposito;
+import com.horibank.horibank.domain.record.Saque;
 import com.horibank.horibank.services.inteface.IContaService;
 import com.horibank.horibank.services.inteface.IPessoaService;
 
@@ -101,5 +102,22 @@ public class ContaController {
         }
 
         return ResponseEntity.ok("Deposito realizado com sucesso");
+    }
+
+    @PostMapping("/sacar")
+    public ResponseEntity<?> Sacar(@RequestBody Saque saque) {
+
+        try {
+            var conta = contaService.ObterConta(saque.idConta());
+            conta.Sacar(Double.parseDouble(saque.valor()));
+            contaService.AtualizarConta(conta);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+        }
+
+        return ResponseEntity.ok("Saque realizado com sucesso! Aproveite o seu dinheiro");
     }
 }
