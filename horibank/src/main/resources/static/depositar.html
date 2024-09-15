@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="/css/global.css">
 
-    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
-    <title>HoriBank | Cadastro Pessoa </title>
+    <title>HoriBank | Conta </title>
 
     <nav class="nav">
         <div class="nav__btns">     
@@ -26,32 +25,31 @@
     <div class="card">
         <div class="content">
             <div class="row justify-content-center" style="padding: 50px;">
-
-                        <div class="col">
-                            <h1 class="text-center-tit">Cadastro pessoa</h1>
-                        </div>
-                        <div class="col-2">
-                            <a id="voltar" class="btn btn-primary mt-3 voltar" href="/index.html">
-                                <i class="uil uil-angle-left"></i>
-                            </a>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <div class="mb-3">
-                                <label for="nomeTitular" class="form-label">Nome do Titular</label>
-                                <input type="text" class="form-control" id="nomeTitular" name="nomeTitular" required>
+                        <div class="row align-items-center">
+                            <div class="col-auto d-flex align-items-center">
+                                <h1 class="text-center-tit">Depósito</h1>
+                                
+                                <a id="voltar" title="voltar" class="btn btn-primary voltar" style="margin-left: 240px;">
+                                    <i class="uil uil-angle-left"></i>
+                                </a>
                             </div>
-                            <div class="mb-3">
-                                <label for="cpf" class="form-label">Número CPF</label>
-                                <input type="text" class="form-control" id="cpf" name="numeroCpf" placeholder="Ex: 123.456.789-00" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="telefone" class="form-label">Número Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Ex: (99) 99999-9999" required>
-                            </div>                            
-                            <button id="cadastrar" class="btn btn-primary w-100" onclick="cadastrarPessoa()">Cadastrar</button>
                         </div>
 
+                        <div class="row align-items-center mt-5">
+                            <div class="col-13 d-flex flex-column align-items-center mb-3">
+                                <label for="valorDeposito" class="form-label mb-2" title="deposito">Quanto deseja depositar?</label>
+                                <input type="text" class="form-control" id="valorDeposito" name="valor deposito" placeholder="R$ 0,00"  style="width: 200px; text-align: center;"  required>
+                            </div>
+
+                            <button id="depositar" title="depositar" class="btn btn-primary w-100" onclick="depositar()">Depositar</button>
+                        </div>
+
+                        
+
+                            
+
+
+                        
                         <div id="mensagem" style="padding-top: 1rem;"></div>
 
                         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -73,21 +71,39 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.3/dist/js/bootstrap.bundle.min.js"></script>   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
+
  
 </body>
 <script>
 
     $(document).ready(function() {
-        $('#cpf').mask('000.000.000-00', {reverse: true});
-        $('#telefone').mask('(00) 00000-0000');
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+
+        $('#valorDeposito').mask('000.000.000.000.000,00', { reverse: true });
+        $('#valorDeposito').on('blur', function() {
+                var value = $(this).val();
+                if (value) {
+                    $(this).val('R$ ' + value);
+                }
+            });
+
+        $('#valorDeposito').on('focus', function() {
+            var value = $(this).val().replace('R$ ', '');
+            $(this).val(value);
+        });
+
+        const voltar = document.getElementById('voltar');
+        voltar.addEventListener('click', function() {
+            window.location.href = `/conta.html?id=${id}`;
+        });
+      
 
         const themeToggleBtn = document.getElementById('theme-toggle');
         const card = document.querySelector('.card');
-
         const body = document.body;
-
         let isDarkTheme = false;
-
         themeToggleBtn.addEventListener('click', function() {
 
             if (isDarkTheme) {
@@ -111,56 +127,62 @@
                 isDarkTheme = true;
             }
         });
-    });
-    
+    }); 
 
-    function cadastrarPessoa(){
-            let nomeTitular = document.getElementById('nomeTitular').value;
-            let telefoneTitular = document.getElementById('telefone').value;
-            var cpfSemFormatacao = $('#cpf').val().replace(/[.-]/g, '');
 
-            if (nomeTitular === "" || cpf === "" || telefone === "") {
-                event.preventDefault(); 
-                document.getElementById('mensagem').innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        Por favor, preencha todos os campos.
+    function depositar(){
+        let valorDeposito = document.getElementById('valorDeposito').value.replace('R$ ', '');        
+        var urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get('id');
+
+        if (valorDeposito === "") {
+            event.preventDefault(); 
+            document.getElementById('mensagem').innerHTML = `
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    <div>
+                        Os campos não foram preenchidos
                     </div>
-                `;
-            }
+                </div>
+            `;
+        } else {
 
-            var pessoa = {
-                nuCpf: cpfSemFormatacao,
-                nome: nomeTitular,
-                telefone: telefoneTitular
+            var deposito = {
+                valor: valorDeposito,
+                idConta: id
             };
 
+            console.log(deposito);
+
             $.ajax({
-                url: '/api/pessoa/cadastrar',
+                url: '/api/conta/depositar',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(pessoa),
-                success: function(response){
+                data: JSON.stringify(deposito),
+                success: function(response) {
                     document.getElementById('mensagem').innerHTML = `
-                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                         <div class="alert alert-success d-flex align-items-center" role="alert">
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
                             <div>
-                                Pessoa cadastrada com sucesso
+                               ${response}
                             </div>
                         </div>
                     `;
                 },
-                error: function(response){
+                error: function(response) {
                     document.getElementById('mensagem').innerHTML = `
                         <div class="alert alert-warning d-flex align-items-center" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                                <div>
-                                    ${response.responseText}
-                                </div>
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                            <div>
+                                ${response.responseText}
+                            </div>
                         </div>
                     `;
                 }
             });
         }
+    }
 </script>
+
 </html>
 

@@ -26,7 +26,7 @@ public class ContaService implements IContaService{
         contaRepository.save(conta);
     }
 
-    public List<Conta> ObterConta(String id) {
+    public List<Conta> ObterContas(String id) {
         return contaRepository.findByIdPessoa(Integer.parseInt(id));
     }
 
@@ -38,5 +38,13 @@ public class ContaService implements IContaService{
         }
 
         return true;
+    }
+
+    public Conta ObterConta(String id) {
+        return contaRepository.findById(Integer.parseInt(id)).get();
+    }
+
+    public void AtualizarConta(Conta conta) {
+        contaRepository.save(conta);
     }
 }

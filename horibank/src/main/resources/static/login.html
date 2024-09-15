@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" sizes="192x192" href="https://static.wixstatic.com/media/eb4adb_9f9601a5e2364b2694fe16f38c7db46c%7Emv2_d_1920_1875_s_2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/eb4adb_9f9601a5e2364b2694fe16f38c7db46c%7Emv2_d_1920_1875_s_2.png" type="image/png">
+    <link rel="icon" sizes="192x192" href="https://static.vecteezy.com/system/resources/previews/005/129/928/non_2x/piggy-bank-illustration-flat-cartoon-style-free-vector.jpg" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="/css/global.css">
 
     <script src="https://unpkg.com/htmx.org@1.9.3"></script>
-    <title>HoriBank | Cadastro Pessoa </title>
+    <title>HoriBank | Login </title>
 
     <nav class="nav">
         <div class="nav__btns">     
@@ -128,7 +128,7 @@
     function login(){
             let nomeTitular = document.getElementById('nomeTitular').value;
             let senha = document.getElementById('senha').value;
-
+            let continuar = true;
 
             if (nomeTitular === "" || senha === "" ) {
                 event.preventDefault(); 
@@ -140,6 +140,7 @@
                         </div>
                     </div>
                 `;
+                continuar = false;
             }
 
             var login = {
@@ -147,43 +148,45 @@
                 senha: senha,
             };
 
-            $.ajax({
-                url: '/api/pessoa/login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(login),
-                success: function(response){
-                    document.getElementById('mensagem').innerHTML = `
-                        <div class="alert alert-success d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-                            <div>
-                                Logado com sucesso
+            if(continuar){
+                $.ajax({
+                    url: '/api/pessoa/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(login),
+                    success: function(response){
+                        document.getElementById('mensagem').innerHTML = `
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                                <div>
+                                    Logado com sucesso
+                                </div>
                             </div>
-                        </div>
-                    `;
-                    setInterval(function() {
-                        localStorage.setItem('pessoaLogada', JSON.stringify(response));
-                        window.location.href = "/home.html";
-                    }, 1000);
+                        `;
+                        setInterval(function() {
+                            localStorage.setItem('pessoaLogadaId', JSON.stringify(response.id));
+                            localStorage.setItem('pessoaLogadaNome', JSON.stringify(response.nome));
+                            window.location.href = "/home.html";
+                        }, 1000);
 
-                },
-                error: function(response){
-                    document.getElementById('mensagem').innerHTML = `
-                        <div class="alert alert-warning d-flex align-items-center" role="alert">
-                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                            <div>
-                                ${response}
+                    },
+                    error: function(response){
+                        document.getElementById('mensagem').innerHTML = `
+                            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                <div>
+                                    ${response.responseText}
+                                </div>
                             </div>
-                        </div>
-                    `;
-                }
-            });
+                        `;
+                    }
+                });
+            }
         }
 
         function mostrarSenha(){
             var senhaField = $('#senha');
             var iconEye = document.getElementById('iconeSenha');
-            console.log(iconEye);
 
             if (senhaField.attr('type') === 'password') {
                 senhaField.attr('type', 'text');

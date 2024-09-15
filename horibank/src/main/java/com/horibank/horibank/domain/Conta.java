@@ -88,4 +88,8 @@ public class Conta {
                 + ", tipoConta=" + tipoConta + "]";
     }
     
+
+    public void Depositar(double valor) {
+        this.saldo += valor;
+    }
 }
