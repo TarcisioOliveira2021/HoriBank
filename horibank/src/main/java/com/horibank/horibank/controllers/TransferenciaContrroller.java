@@ -23,13 +23,17 @@ public class TransferenciaContrroller {
     @GetMapping("/historico/{id}")
     public ResponseEntity<?> GetHistoricoTranferenciasConta(@PathVariable("id") String id) {
         List<HistoricoTransferencia> historicoTransferencias = null; 
-        
+      
         try {
             historicoTransferencias = transferenciaService.HistoricoTransferenciasDaConta(Integer.parseInt(id));
+
+            for (var historicoTransferencia : historicoTransferencias) {
+                System.out.println(historicoTransferencia);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-    
+        
         return ResponseEntity.ok(historicoTransferencias); 
     }
 }

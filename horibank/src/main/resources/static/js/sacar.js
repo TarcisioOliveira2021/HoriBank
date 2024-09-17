@@ -49,7 +49,7 @@ themeToggleBtn.addEventListener('click', function () {
 });
 
 function sacar() {
-    let valorSaque = document.getElementById('valorSaque').value.replace('R$ ', '');
+    let valorSaque = document.getElementById('valorSaque').value.replace('R$ ', '').replace("'", "").replace(",", ".");
     var urlParams = new URLSearchParams(window.location.search);
     let id = urlParams.get('id');
 

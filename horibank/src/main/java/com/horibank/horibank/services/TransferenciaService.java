@@ -1,6 +1,5 @@
 package com.horibank.horibank.services;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ import com.horibank.horibank.repository.TransferenciaRepository;
 import com.horibank.horibank.services.inteface.ITransferenciaService;
 
 @Service
-public class TransferenciaService implements ITransferenciaService{
+public class TransferenciaService implements ITransferenciaService {
 
     @Autowired
     TransferenciaRepository transferenciaRepository;
@@ -41,40 +40,39 @@ public class TransferenciaService implements ITransferenciaService{
         LocalDateTime dataHoraAtual = LocalDateTime.now();
 
         transferenciaRepository.save(
-            new Transferencia(
-                idContaOrigem, 
-                idContaDestino, 
-                valor, 
-                dataHoraAtual
-            )
+                new Transferencia(
+                        idContaOrigem,
+                        idContaDestino,
+                        valor,
+                        dataHoraAtual
+                )
         );
     }
 
-
-    public List<HistoricoTransferencia> HistoricoTransferenciasDaConta(Integer idConta) {      
-        
+    public List<HistoricoTransferencia> HistoricoTransferenciasDaConta(Integer idConta) {
         List<HistoricoTransferencia> historicoTransferencias = new ArrayList<>();
 
         List<Transferencia> transferencias = transferenciaRepository.findAll().stream()
-            .filter(transferencia -> transferencia.getIdContaOrigem() == idConta)
-            .toList();
+                .filter(transferencia -> transferencia.getIdContaOrigem().equals(idConta))
+                .toList();
+
+        System.out.println("Lista não vai ser vazia: " + transferencias.size());
 
         for (Transferencia transferencia : transferencias) {
             var data = transferencia.getData().toString().split("T")[0];
             var hora = transferencia.getData().toString().split("T")[1].split("\\.")[0];
 
-            historicoTransferencias.add(
-                new HistoricoTransferencia(
+            historicoTransferencias.add(new HistoricoTransferencia(
                     transferencia.getId(),
-                    pessoaRepository.findById(contaRepository.findById(transferencia.getIdContaDestino()).get().getIdPessoa()).get().getNome(),
+                    pessoaRepository.findById(contaRepository.findById(idConta).get().getIdPessoa()).get().getNome(),
                     transferencia.getValor(),
                     data,
                     hora,
                     contaRepository.findById(transferencia.getIdContaDestino()).get().getTipoConta().toString()
-                )
+            )
             );
         }
-        
+
         return historicoTransferencias;
     }
 }

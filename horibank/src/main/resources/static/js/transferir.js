@@ -108,7 +108,7 @@ function transferir() {
                 myModal.hide();
 
                 var transferencia = {
-                    valor: valorTransferencia.replace('R$ ', ''),
+                    valor: valorTransferencia.replace('R$ ', '').replace('.', '').replace(',', '.'),
                     idContaOrigem: id,
                     idContaDestino: response.idConta,
                     tipoContaDestino: response.tipoConta

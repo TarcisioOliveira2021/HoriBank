@@ -47,4 +47,10 @@ public class Transferencia {
     public LocalDateTime getData() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "Transferencia [data=" + data + ", id=" + id + ", idContaDestino=" + idContaDestino + ", idContaOrigem="
+                + idContaOrigem + ", valor=" + valor + "]";
+    }
 }

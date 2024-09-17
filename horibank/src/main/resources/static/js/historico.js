@@ -43,9 +43,14 @@ obterDadosHistoricoTransferencia(id).then((response) => {
     const tabela = document.getElementById('tabelaHistorico').querySelector('tbody');
 
     historicos.forEach(historico => {
+        historico.valor = historico.valor.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
         tabela.innerHTML += `
             <tr>
-                <td>${historico.id}</td>
+                <td>${historico.idTransferencia}</td>
                 <td>${historico.titularContaDestino}</td>
                 <td>${historico.valor}</td>
                 <td>${historico.data}</td>
@@ -62,6 +67,7 @@ function obterDadosHistoricoTransferencia(id) {
             url: `/api/transferencia/historico/${id}`,
             type: 'GET',
             success: function (response) {
+                console.log(response);
                 resolve(response);
             },
             error: function (response) {
