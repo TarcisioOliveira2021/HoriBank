@@ -1,6 +1,6 @@
 package com.horibank.horibank.domain;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +16,12 @@ public class Transferencia {
     private Integer idContaOrigem;
     private Integer idContaDestino;
     private double valor;
-    private Date data;
+    private LocalDateTime data;
     
     public Transferencia() {
     }
 
-    public Transferencia(Integer idContaOrigem, Integer idContaDestino, double valor, Date data) {
+    public Transferencia(Integer idContaOrigem, Integer idContaDestino, double valor, LocalDateTime data) {
         this.idContaOrigem = idContaOrigem;
         this.idContaDestino = idContaDestino;
         this.valor = valor;
@@ -32,32 +32,19 @@ public class Transferencia {
         return idContaOrigem;
     }
 
-    public void setIdContaOrigem(Integer idContaOrigem) {
-        this.idContaOrigem = idContaOrigem;
+    public Integer getId() {
+        return id;
     }
 
     public Integer getIdContaDestino() {
         return idContaDestino;
     }
 
-    public void setIdContaDestino(Integer idContaDestino) {
-        this.idContaDestino = idContaDestino;
-    }
-
     public double getValor() {
         return valor;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public Date getData() {
+    public LocalDateTime getData() {
         return data;
     }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
 }

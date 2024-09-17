@@ -1,24 +1,27 @@
 package com.horibank.horibank.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.horibank.horibank.domain.Conta;
 import com.horibank.horibank.domain.enums.TipoConta;
+import com.horibank.horibank.domain.record.ContaPessoa;
 import com.horibank.horibank.domain.record.ContaRecord;
 import com.horibank.horibank.domain.record.Deposito;
 import com.horibank.horibank.domain.record.Saque;
 import com.horibank.horibank.services.inteface.IContaService;
 import com.horibank.horibank.services.inteface.IPessoaService;
+import com.horibank.horibank.services.inteface.ITransferenciaService;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.util.List;
 
 
 @RestController
@@ -30,6 +33,9 @@ public class ContaController {
 
     @Autowired
     IPessoaService pessoaService;
+
+    @Autowired
+    ITransferenciaService transferenciaService;
 
     @PostMapping("/cadastrar")
     public ResponseEntity<?> CadastraConta(@RequestBody ContaRecord dados) {
@@ -52,8 +58,8 @@ public class ContaController {
         return ResponseEntity.ok("Conta cadastrada com sucesso");
     }
 
-    @PostMapping("/obtercontas")
-    public ResponseEntity<?> ObterContas(@RequestBody String id) {
+    @GetMapping("/obtercontas/{id}")
+    public ResponseEntity<?> ObterContas(@PathVariable("id") String id) {
         List<Conta> conta = null;
         try {
             conta = contaService.ObterContas(id);
@@ -65,22 +71,21 @@ public class ContaController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Erro ao obter conta: " + e.getMessage());
+                .body(e.getMessage());
         }
 
         return ResponseEntity.ok(conta);
     }
 
-    @PostMapping("/obterconta")
-    public ResponseEntity<?> ObterConta(@RequestBody String id) {
+    @GetMapping("/obterconta/{id}")
+    public ResponseEntity<?> ObterConta(@PathVariable("id") String id) {
         Conta conta = null;
-
+        
         try {
             conta = contaService.ObterConta(id);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Erro ao obter conta: " + e.getMessage());
+                .body(e.getMessage());
         }
 
         return ResponseEntity.ok(conta);
@@ -88,17 +93,16 @@ public class ContaController {
 
     @PostMapping("/depositar")
     public ResponseEntity<?> Deposito(@RequestBody Deposito deposito) {
-        System.out.println(deposito);
+        var valor = Double.parseDouble(deposito.valor());
 
         try {
             var conta = contaService.ObterConta(deposito.idConta());
-            conta.Depositar(Double.parseDouble(deposito.valor()));
+            conta.Depositar(valor);
             contaService.AtualizarConta(conta);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Erro ao obter conta: " + e.getMessage());
+                .body(e.getMessage());
         }
 
         return ResponseEntity.ok("Deposito realizado com sucesso");
@@ -113,11 +117,54 @@ public class ContaController {
             contaService.AtualizarConta(conta);
 
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+        }
+
+        return ResponseEntity.ok("Saque realizado com sucesso");
+    }
+
+    @GetMapping("/obtercontapornumero/{numeroConta}/{tipoConta}")
+    public ResponseEntity<?> obterContaPorNumero(@PathVariable("numeroConta") String numeroConta, @PathVariable("tipoConta") String tipoConta) {
+        var numero = Integer.parseInt(numeroConta.split("-")[0]);
+        var digito = Integer.parseInt(numeroConta.split("-")[1]);
+        var tipo = TipoConta.valueOf(tipoConta);
+        Conta conta = null;
+        ContaPessoa contaPessoa = null;
+
+        try {
+            conta = contaService.ObterContaPorNumeroDigitoTipoConta(numero, digito, tipo);
+            
+            if(conta == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Conta não encontrada");
+            }
+            
+            var pessoa = pessoaService.ObterPessoaPeloId(conta.getIdPessoa());
+            contaPessoa = contaService.CriarContaPessoa(conta, pessoa);
+
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
         }
 
-        return ResponseEntity.ok("Saque realizado com sucesso! Aproveite o seu dinheiro");
+        return ResponseEntity.ok(contaPessoa);
+    }
+
+    @PostMapping("/transferir")
+    public ResponseEntity<?> Transferir(@RequestBody com.horibank.horibank.domain.record.Transferencia transferencia) {
+        try {
+            var contaOrigem = contaService.ObterConta(transferencia.idContaOrigem());
+            var contaDestino = contaService.ObterConta(transferencia.idContaDestino());
+            transferenciaService.Transferir(contaOrigem, contaDestino, (Double) Double.parseDouble(transferencia.valor()));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
+        }
+
+        return ResponseEntity.ok("Transferencia realizada com sucesso");
     }
 }

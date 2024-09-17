@@ -1,6 +1,7 @@
 package com.horibank.horibank.domain;
 
 import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -38,38 +39,15 @@ public class Pessoa {
         return conta;
     }
 
-    public void setConta(Conta conta) {
-        this.conta.add(conta);
-    }
-
-
     public String getNuCpf() {
         return nuCpf;
-    }
-
-    public void setNuCpf(String nuCpf) {
-        this.nuCpf = nuCpf;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getTelefone() {
         return telefone;
     }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    @Override
-    public String toString() {
-        return "Pessoa [nuCpf=" + nuCpf + ", nome=" + nome + ", telefone=" + telefone + ", conta=" + conta + "]";
-    }
-    
 }

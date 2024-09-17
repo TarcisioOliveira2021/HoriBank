@@ -26,7 +26,7 @@ public class PessoaController {
             pessoaService.CadastrarPessoa(pessoa);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Erro ao cadastrar pessoa" + e.getMessage());
+            .body(e.getMessage());
         }
 
         return ResponseEntity.ok("Pessoa cadastrada com sucesso");
@@ -51,7 +51,7 @@ public class PessoaController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Erro ao logar: " + e.getMessage());
+            .body(e.getMessage());
         }
 
         return ResponseEntity.ok(pessoa);

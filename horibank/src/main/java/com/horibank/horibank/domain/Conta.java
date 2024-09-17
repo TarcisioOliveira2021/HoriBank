@@ -82,13 +82,6 @@ public class Conta {
         this.tipoConta = tipoConta;
     }
 
-    @Override
-    public String toString() {
-        return "Conta [idPessoa=" + idPessoa + ", numero=" + numero + ", digito=" + digito + ", saldo=" + saldo
-                + ", tipoConta=" + tipoConta + "]";
-    }
-    
-
     public void Depositar(double valor) {
         this.saldo += valor;
     }
