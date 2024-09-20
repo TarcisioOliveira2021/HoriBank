@@ -1,10 +1,11 @@
 $('#numeroComDigito').mask('000000-0', { placeholder: "123456-7" });
 
 const themeToggleBtn = document.getElementById('theme-toggle');
+const texto = document.querySelector('.text-center-tit');
 const card = document.querySelector('.card');
-
+const numeroContaTexto = document.querySelector('.numeroConta').querySelector("label[for='numeroComDigito']");
+const tipoContaTexto = document.querySelector('.tipoConta').querySelector("label[for='tipoConta']");
 const body = document.body;
-
 let isDarkTheme = false;
 
 themeToggleBtn.addEventListener('click', function () {
@@ -15,7 +16,9 @@ themeToggleBtn.addEventListener('click', function () {
         body.classList.add('bg-light', 'text-dark');
         card.classList.remove('card-bg-dark');
         card.classList.add('card-bg-light');
-
+        texto.style.color = 'black';
+        numeroContaTexto.style.color = 'black';
+        tipoContaTexto.style.color = 'black';
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon change-theme" id="theme-button"></i>';
         isDarkTheme = false;
@@ -25,6 +28,9 @@ themeToggleBtn.addEventListener('click', function () {
         card.classList.add('card-bg-dark');
         body.classList.remove('bg-light', 'text-dark');
         body.classList.add('bg-dark', 'text-light');
+        texto.style.color = '#f8ea6a';
+        numeroContaTexto.style.color = '#f8ea6a';
+        tipoContaTexto.style.color = '#f8ea6a';
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon-eclipse" id="theme-button"></i>';
         isDarkTheme = true;

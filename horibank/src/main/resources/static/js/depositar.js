@@ -22,6 +22,8 @@ voltar.addEventListener('click', function () {
 
 const themeToggleBtn = document.getElementById('theme-toggle');
 const card = document.querySelector('.card');
+const texto = document.querySelector('.text-center-tit');
+const textoDeposito = document.querySelector('.deposito').querySelector("label[for='valorDeposito']");
 const body = document.body;
 let isDarkTheme = false;
 themeToggleBtn.addEventListener('click', function () {
@@ -32,6 +34,8 @@ themeToggleBtn.addEventListener('click', function () {
         body.classList.add('bg-light', 'text-dark');
         card.classList.remove('card-bg-dark');
         card.classList.add('card-bg-light');
+        texto.style.color = 'black';
+        textoDeposito.style.color = 'black';
 
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon change-theme" id="theme-button"></i>';
@@ -42,6 +46,8 @@ themeToggleBtn.addEventListener('click', function () {
         card.classList.add('card-bg-dark');
         body.classList.remove('bg-light', 'text-dark');
         body.classList.add('bg-dark', 'text-light');
+        texto.style.color = '#f8ea6a';
+        textoDeposito.style.color = '#f8ea6a';
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon-eclipse" id="theme-button"></i>';
         isDarkTheme = true;
