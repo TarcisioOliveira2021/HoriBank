@@ -6,6 +6,12 @@ const depositarBtn = document.getElementById('depositar');
 const sacarBtn = document.getElementById('sacar');
 const transferirBtn = document.getElementById('transferir');
 const historicoBtn = document.getElementById('historico');
+const contaTexto = document.querySelector('.conta').querySelector('h1');
+const saldo = document.querySelector('.saldo').querySelector('h2');
+const informacoesConta = document.querySelector('.informacoes');
+const servicosConta = document.querySelector('.servicos');
+const operacoesConta = document.querySelector('.operacoes');
+const icone = document.getElementById('exibirSaldo').querySelector('i');
 
 depositarBtn.addEventListener('click', function () {
     window.location.href = `/depositar.html?id=${id}`;
@@ -35,8 +41,14 @@ themeToggleBtn.addEventListener('click', function () {
         body.classList.add('bg-light', 'text-dark');
         card.classList.remove('card-bg-dark');
         card.classList.add('card-bg-light');
-
-
+        contaTexto.style.color = 'black';
+        saldo.style.color = 'black';
+        informacoesConta.style.color = 'black';
+        servicosConta.style.color = 'black';
+        operacoesConta.style.color = 'black';
+        icone.style.color = 'black';
+        console.log(icone);
+        
         themeToggleBtn.innerHTML = '<i class="uil uil-moon change-theme" id="theme-button"></i>';
         isDarkTheme = false;
     } else {
@@ -45,7 +57,14 @@ themeToggleBtn.addEventListener('click', function () {
         card.classList.add('card-bg-dark');
         body.classList.remove('bg-light', 'text-dark');
         body.classList.add('bg-dark', 'text-light');
-
+        contaTexto.style.color = '#f8ea6a';
+        saldo.style.color = '#f8ea6a';
+        informacoesConta.style.color = '#f8ea6a';
+        servicosConta.style.color = '#f8ea6a';
+        operacoesConta.style.color = '#f8ea6a';
+        icone.style.color = 'rgb(248, 234, 106)';
+        console.log(icone);
+        
         themeToggleBtn.innerHTML = '<i class="uil uil-moon-eclipse" id="theme-button"></i>';
         isDarkTheme = true;
     }
@@ -70,7 +89,6 @@ recuperarInformacoesConta(id).then(response => {
         if (saldo.innerText === '*****') {
             botaoSaldo.innerHTML = '<i class="uil uil-eye"></i>';
             saldo.innerText = formatarMoeda(conta.saldo);
-
         } else {
             botaoSaldo.innerHTML = '<i class="uil uil-eye-slash"></i>';
             saldo.innerText = '*****';

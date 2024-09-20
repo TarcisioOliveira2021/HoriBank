@@ -3,6 +3,10 @@ $('#telefone').mask('(00) 00000-0000');
 
 const themeToggleBtn = document.getElementById('theme-toggle');
 const card = document.querySelector('.card');
+const texto = document.querySelector('.text-center-tit');
+const nomeTitular = document.querySelector('.nomeTitularRow').querySelector("label[for='nomeTitular']");
+const numeroCPF = document.querySelector('.numeroCPF').querySelector("label[for='cpf']");
+const numeroTelefone = document.querySelector('.numeroTelefone').querySelector("label[for='telefone']");
 
 const body = document.body;
 
@@ -16,6 +20,10 @@ themeToggleBtn.addEventListener('click', function () {
         body.classList.add('bg-light', 'text-dark');
         card.classList.remove('card-bg-dark');
         card.classList.add('card-bg-light');
+        texto.style.color = 'black';
+        nomeTitular.style.color = 'black';
+        numeroCPF.style.color = 'black';
+        numeroTelefone.style.color = 'black';
 
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon change-theme" id="theme-button"></i>';
@@ -26,6 +34,11 @@ themeToggleBtn.addEventListener('click', function () {
         card.classList.add('card-bg-dark');
         body.classList.remove('bg-light', 'text-dark');
         body.classList.add('bg-dark', 'text-light');
+        texto.style.color = '#f8ea6a';
+        nomeTitular.style.color = '#f8ea6a';
+        numeroCPF.style.color = '#f8ea6a';
+        numeroTelefone.style.color = '#f8ea6a';
+        
 
         themeToggleBtn.innerHTML = '<i class="uil uil-moon-eclipse" id="theme-button"></i>';
         isDarkTheme = true;
